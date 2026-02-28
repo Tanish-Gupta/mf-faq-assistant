@@ -21,14 +21,23 @@ A modern FAQ assistant that answers factual questions about mutual fund schemes 
 
 ## Usage
 
-### Web UI (Recommended)
+### Streamlit (Recommended)
+
+```bash
+pip install -r requirements.txt
+python -m streamlit run streamlit_app.py
+```
+
+Open http://localhost:8501 in your browser.
+
+### Flask Web UI
 
 ```bash
 pip install -r requirements.txt
 python app.py
 ```
 
-Open http://localhost:5000 in your browser.
+Open http://localhost:5001 in your browser.
 
 ### Command Line
 
@@ -61,4 +70,5 @@ This assistant provides **factual information only** from official sources. It d
 ## Requirements
 
 - Python 3.6+
-- Flask (for web UI)
+- Streamlit (recommended UI)
+- Flask (alternative UI)
