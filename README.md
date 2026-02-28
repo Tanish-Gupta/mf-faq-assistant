@@ -1,9 +1,10 @@
 # Mutual Fund FAQ Assistant
 
-A simple command-line FAQ assistant that answers factual questions about mutual fund schemes in India using only official public sources.
+A modern FAQ assistant that answers factual questions about mutual fund schemes in India using only official public sources.
 
 ## Features
 
+- Modern, minimalist web UI
 - Answers common questions about mutual funds
 - Every answer includes an official source link
 - Topics covered:
@@ -20,6 +21,17 @@ A simple command-line FAQ assistant that answers factual questions about mutual 
 
 ## Usage
 
+### Web UI (Recommended)
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
+
+Open http://localhost:5000 in your browser.
+
+### Command Line
+
 ```bash
 python mf_faq_assistant.py
 ```
@@ -30,7 +42,7 @@ Then type your question or keyword. Examples:
 - `how to download statement`
 - `elss lock-in`
 
-### Commands
+### CLI Commands
 - `help` - Show available topics
 - `list` - List all questions
 - `quit` - Exit the assistant
@@ -49,4 +61,4 @@ This assistant provides **factual information only** from official sources. It d
 ## Requirements
 
 - Python 3.6+
-- No external dependencies (uses standard library only)
+- Flask (for web UI)

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MF FAQ Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #fafafa;
+            --bg-secondary: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b7280;
+            --accent: #2563eb;
+            --accent-light: #eff6ff;
+            --border: #e5e7eb;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .logo {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .disclaimer {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-top: 16px;
+        }
+
+        .search-section {
+            margin-bottom: 40px;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 24px;
+            padding-left: 52px;
+            font-size: 16px;
+            font-family: inherit;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--bg-secondary);
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .topics-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .topics-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .topic-chip {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .topic-chip:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .answer-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .answer-section.visible {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .answer-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .answer-question {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .answer-content {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        .answer-source {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .source-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .source-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .source-link svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .no-results-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .loading.visible {
+            display: block;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .answer-card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">MF FAQ</div>
+            <h1>Mutual Fund FAQ Assistant</h1>
+            <p class="subtitle">Factual information from official sources</p>
+            <span class="disclaimer">⚠️ Not investment advice</span>
+        </header>
+
+        <section class="search-section">
+            <div class="search-container">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput" 
+                    placeholder="Ask about expense ratio, exit load, SIP, ELSS..."
+                    autocomplete="off"
+                >
+            </div>
+        </section>
+
+        <section class="topics-section" id="topicsSection">
+            <div class="section-title">Popular Topics</div>
+            <div class="topics-grid" id="topicsGrid"></div>
+        </section>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Searching...</p>
+        </div>
+
+        <section class="answer-section" id="answerSection">
+            <div class="answer-card">
+                <h2 class="answer-question" id="answerQuestion"></h2>
+                <div class="answer-content" id="answerContent"></div>
+                <div class="answer-source">
+                    <span class="source-label">Source:</span>
+                    <a href="#" class="source-link" id="sourceLink" target="_blank" rel="noopener">
+                        <span id="sourceName"></span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            <div class="no-results-icon">🔍</div>
+            <p>No matching FAQ found. Try a different search term.</p>
+        </div>
+
+        <footer>
+            <p>Sources: <a href="https://www.sebi.gov.in" target="_blank">SEBI</a> · <a href="https://www.amfiindia.com" target="_blank">AMFI</a> · <a href="https://www.mfcentral.com" target="_blank">MF Central</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const topicsSection = document.getElementById('topicsSection');
+        const topicsGrid = document.getElementById('topicsGrid');
+        const answerSection = document.getElementById('answerSection');
+        const answerQuestion = document.getElementById('answerQuestion');
+        const answerContent = document.getElementById('answerContent');
+        const sourceLink = document.getElementById('sourceLink');
+        const sourceName = document.getElementById('sourceName');
+        const loading = document.getElementById('loading');
+        const noResults = document.getElementById('noResults');
+
+        const topics = [
+            { label: 'Expense Ratio', query: 'expense ratio' },
+            { label: 'Exit Load', query: 'exit load' },
+            { label: 'Minimum SIP', query: 'minimum sip' },
+            { label: 'ELSS Lock-in', query: 'elss lock-in' },
+            { label: 'Riskometer', query: 'riskometer' },
+            { label: 'Benchmark', query: 'benchmark' },
+            { label: 'Download Statement', query: 'download statement' },
+            { label: 'NAV', query: 'nav' },
+            { label: 'KYC', query: 'kyc' },
+            { label: 'AUM', query: 'aum' }
+        ];
+
+        topics.forEach(topic => {
+            const chip = document.createElement('button');
+            chip.className = 'topic-chip';
+            chip.textContent = topic.label;
+            chip.addEventListener('click', () => {
+                searchInput.value = topic.query;
+                performSearch(topic.query);
+            });
+            topicsGrid.appendChild(chip);
+        });
+
+        let debounceTimer;
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            const query = e.target.value.trim();
+            
+            if (query.length < 2) {
+                hideAnswer();
+                return;
+            }
+
+            debounceTimer = setTimeout(() => {
+                performSearch(query);
+            }, 300);
+        });
+
+        async function performSearch(query) {
+            showLoading();
+            
+            try {
+                const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                hideLoading();
+                
+                if (data.found) {
+                    showAnswer(data);
+                } else {
+                    showNoResults();
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Search error:', error);
+            }
+        }
+
+        function showAnswer(data) {
+            noResults.style.display = 'none';
+            topicsSection.style.display = 'none';
+            answerQuestion.textContent = data.question;
+            answerContent.textContent = data.answer;
+            sourceLink.href = data.source;
+            sourceName.textContent = data.source_name;
+            answerSection.classList.add('visible');
+        }
+
+        function hideAnswer() {
+            answerSection.classList.remove('visible');
+            noResults.style.display = 'none';
+            topicsSection.style.display = 'block';
+        }
+
+        function showNoResults() {
+            answerSection.classList.remove('visible');
+            topicsSection.style.display = 'none';
+            noResults.style.display = 'block';
+        }
+
+        function showLoading() {
+            loading.classList.add('visible');
+            answerSection.classList.remove('visible');
+            noResults.style.display = 'none';
+        }
+
+        function hideLoading() {
+            loading.classList.remove('visible');
+        }
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                hideAnswer();
+            }
+        });
+    </script>
+</body>
+</html>
